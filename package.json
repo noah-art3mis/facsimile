@@ -9,10 +9,14 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   },
   "dependencies": {
+    "client-zip": "^2.4.4",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1"
   }
 }

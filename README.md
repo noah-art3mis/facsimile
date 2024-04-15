@@ -1,55 +1,28 @@
 # Socratic Sync Plate Maker
 
-1. 
+Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2canvas.hertzen.com/).
 
-        function CreatePDFfromHTML() {
-            var HTML_Width = document.querySelector('.html-content')?.width();
-            var HTML_Height = document.querySelector('.html-content')?.height();
-            var top_left_margin = 15;
-            var PDF_Width = HTML_Width + top_left_margin * 2;
-            var PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
-            var canvas_image_width = HTML_Width;
-            var canvas_image_height = HTML_Height;
+## How to
 
-            var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+1. set `DATA` parameter in `config.ts`
+    - ⚠️ DATA should be a json object. The format should fit the `Book` type in `types.ts`
+1. set background and text color in `style.css`
+1. press `compile`. check previews to see if anything is amiss
+    - each row is one quote.
+1. press `download`
 
-            html2canvas(document.querySelector('.html-content')[0]).then(
-                function (canvas) {
-                    var imgData = canvas.toDataURL('image/jpeg', 1.0);
-                    var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                    pdf.addImage(
-                        imgData,
-                        'JPG',
-                        top_left_margin,
-                        top_left_margin,
-                        canvas_image_width,
-                        canvas_image_height
-                    );
-                    for (var i = 1; i <= totalPDFPages; i++) {
-                        pdf.addPage(PDF_Width, PDF_Height);
-                        pdf.addImage(
-                            imgData,
-                            'JPG',
-                            top_left_margin,
-                            -(PDF_Height * i) + top_left_margin * 4,
-                            canvas_image_width,
-                            canvas_image_height
-                        );
-                    }
-                    pdf.save('Your_PDF_Name.pdf');
-                    document.querySelector('.html-content').hide();
-                }
-            );
-        }
+## Advanced usage
 
-2. 
-        const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'px',
-            format: [1080, 1350],
-        });
+-   change text size
+-   manually change breaks in data
 
-        doc.text('Hello world!', 1, 1);
-        doc.save('two-by-four.pdf');
-        const result = doc.output();
-        console.log(result);
+## TODO
+
+-   gradient backgrounds
+-   integrate with data generation and cleanup
+-   download zipped
+-   change one page without having to recompile everything
+-   hide big images & auto-compile
+-   add upload field
+
+
