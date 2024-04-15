@@ -136,7 +136,7 @@ async function downloadAll() {
 async function downloadAllZip() {
     const links = document.querySelectorAll('.preview a');
     const files = await Promise.all(
-        Array.from(links).map(async (link: HTMLDivElement) => {
+        Array.from(links).map(async (link: Element) => {
             const name = link.getAttribute('download');
             if (link instanceof HTMLAnchorElement) {
                 const response = await fetch(link.href);
