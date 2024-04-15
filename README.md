@@ -20,9 +20,9 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 
 -   gradient backgrounds
 -   integrate with data generation and cleanup
--   download zipped
 -   change one page without having to recompile everything
 -   hide big images & auto-compile
 -   add upload field
-
-
+-   check if over pixel limit
+    -   https://html2canvas.hertzen.com/faq
+    -   32k px height
