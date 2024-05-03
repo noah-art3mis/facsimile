@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .getElementById('fileInput')
         ?.addEventListener('change', (e) => {getBook(e)});
 
-    // document
-    //     .getElementById('btn-preview')
-    //     ?.addEventListener('click', compilePlates);
+    document
+        .getElementById('btn-preview')
+        ?.addEventListener('click', compilePlates);
 
     document
         .getElementById('btn-download')
@@ -38,7 +38,6 @@ function getBook(event: Event) {
 function generatePlates(book: Book) {
     validateData(book);
     populateOriginals(book);
-    compilePlates()
 }
 
 function populateOriginals(book: Book) {

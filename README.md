@@ -8,7 +8,7 @@ Possible names:
 -   Façade
 -   Facsimile
 -   Mirage
--   Likeness
+-   Likenessnp
 -   Sillhouette
 -   Effigy
 
@@ -41,6 +41,11 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 
 ## TODO
 
+-   pallete tools
+    -   combine all cases
+    -   preview
+    -   invert colors
+    -   add gradients
 -   weird centering issues with the plates
 -   check content for ai api errors
 -   set background and text color with ui
@@ -50,3 +55,11 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 -   check if over pixel limit
     -   https://html2canvas.hertzen.com/faq
     -   32k px height
+
+## Palletes
+
+### ksi
+
+        /* #434343 */
+        /* #e6dad3 */
+        /* #3d4555 */

@@ -5,7 +5,10 @@
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
-    --plate-background: linear-gradient(0deg, #c7c9d9, #c7c9d9);
+
+
+    /* --plate-background-gradient: linear-gradient(0deg, var(--color-d), var(--color-d)); */
+    --plate-background-color: #e6dad3;
     --plate-text-color: #434343;
     --plate-font-size: 4em;
 }
@@ -53,7 +56,8 @@
     padding: 108px 108px 76px 108px;
     line-height: 1.4;
 
-    background-image: var(--plate-background);
+    /* background-image: var(--plate-background); */
+    background: var(--plate-background-color);
     color: var(--plate-text-color);
 
     display: flex;
