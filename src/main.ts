@@ -2,14 +2,14 @@ import html2canvas from 'html2canvas';
 import { downloadZip } from 'client-zip';
 import FileSaver from 'file-saver';
 import { Book, Page } from './types.ts';
-import { PREVIEW_SIZE, IMAGE_TYPE} from './config.ts';
+import { PREVIEW_SIZE, IMAGE_TYPE, MAX_LENGTH_CONTENT } from './config.ts';
 import { validateData } from './validateData.ts';
+import rechunkSentences from './utils.ts';
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    document
-        .getElementById('fileInput')
-        ?.addEventListener('change', (e) => {getBook(e)});
+    document.getElementById('fileInput')?.addEventListener('change', (e) => {
+        getBook(e);
+    });
 
     document
         .getElementById('btn-preview')
@@ -21,22 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function getBook(event: Event) {
-    const files = (event.target as HTMLInputElement)?.files
-        if (files && files.length > 0) {
-            const file: File = files[0];
-            const reader = new FileReader();
-            reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
+    const files = (event.target as HTMLInputElement)?.files;
+    if (files && files.length > 0) {
+        const file: File = files[0];
+        const reader = new FileReader();
+        reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
 
         reader.onload = function (e) {
-            const bookStr = e.target?.result
+            const bookStr = e.target?.result;
             const bookObj: Book = JSON.parse(bookStr as string);
             localStorage.setItem('bookId', bookObj.id);
             generatePlates(bookObj);
-        };}
+        };
     }
+}
 
 function generatePlates(book: Book) {
     validateData(book);
+    console.log(book.pages[0].content);
+    rechunkSentences(book, MAX_LENGTH_CONTENT);
+    console.log(book.pages[0].content);
     populateOriginals(book);
 }
 
@@ -103,6 +107,7 @@ function compilePlates() {
                     const src = canvas.toDataURL(`image/${IMAGE_TYPE}`, 1.0);
                     const div = createPreview(src, plate.id);
                     _page.appendChild(div);
+                    // @ts-ignore
                     plate.style.display = 'none';
                 }
             );
@@ -151,7 +156,11 @@ async function downloadAllZip() {
         })
     );
 
+    // @ts-ignore
     const content = await downloadZip(files).blob();
     const fileName = localStorage.getItem('bookId');
-    FileSaver.saveAs(content, `${fileName ? fileName : 'semblance-results'}.zip`);
+    FileSaver.saveAs(
+        content,
+        `${fileName ? fileName : 'semblance-results'}.zip`
+    );
 }

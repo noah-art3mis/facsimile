@@ -47,6 +47,7 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
     -   invert colors
     -   add gradients
 -   weird centering issues with the plates
+-   add manual sentence rechunking
 -   check content for ai api errors
 -   set background and text color with ui
 -   ui to change number of sentences per page
