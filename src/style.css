@@ -5,8 +5,8 @@
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
-    --plate-background: #887f7a;
-    --plate-color: #fcfcfc;
+    --plate-background: linear-gradient(0deg, #c7c9d9, #c7c9d9);
+    --plate-text-color: #434343;
     --plate-font-size: 4em;
 }
 
@@ -53,8 +53,8 @@
     padding: 108px 108px 76px 108px;
     line-height: 1.4;
 
-    background-color: var(--plate-background);
-    color: var(--plate-color);
+    background-image: var(--plate-background);
+    color: var(--plate-text-color);
 
     display: flex;
     flex-direction: column;
@@ -99,10 +99,20 @@ body {
     min-height: 100vh;
 }
 
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 h1 {
     font-size: 3.2em;
     line-height: 1.1;
-    padding: 3rem;
+    padding: 3rem 3rem 0 3rem;
+}
+
+.subheading {
+    padding: 0 0 3rem 0rem;
 }
 
 button {

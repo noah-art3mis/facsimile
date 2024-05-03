@@ -1,7 +1,7 @@
 export type Book = {
     author: string;
     title: string;
-    code: string;
+    id: string;
     pages: Array<Page>;
 };
 

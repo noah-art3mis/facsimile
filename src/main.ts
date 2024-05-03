@@ -1,29 +1,45 @@
 import html2canvas from 'html2canvas';
 import { downloadZip } from 'client-zip';
 import FileSaver from 'file-saver';
-
 import { Book, Page } from './types.ts';
-import {
-    PREVIEW_SIZE,
-    DATA,
-    MAX_LENGTH_CONTENT,
-    IMAGE_TYPE,
-} from './config.ts';
+import { PREVIEW_SIZE, IMAGE_TYPE} from './config.ts';
 import { validateData } from './validateData.ts';
 
 document.addEventListener('DOMContentLoaded', () => {
-    validateData(DATA);
 
     document
-        .querySelector('#btn-preview')
-        ?.addEventListener('click', compilePlates);
+        .getElementById('fileInput')
+        ?.addEventListener('change', (e) => {getBook(e)});
+
+    // document
+    //     .getElementById('btn-preview')
+    //     ?.addEventListener('click', compilePlates);
 
     document
-        .querySelector('#btn-download')
-        ?.addEventListener('click', downloadAllZip);
-
-    populateOriginals(DATA);
+        .getElementById('btn-download')
+        ?.addEventListener('click', () => downloadAllZip());
 });
+
+function getBook(event: Event) {
+    const files = (event.target as HTMLInputElement)?.files
+        if (files && files.length > 0) {
+            const file: File = files[0];
+            const reader = new FileReader();
+            reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
+
+        reader.onload = function (e) {
+            const bookStr = e.target?.result
+            const bookObj: Book = JSON.parse(bookStr as string);
+            localStorage.setItem('bookId', bookObj.id);
+            generatePlates(bookObj);
+        };}
+    }
+
+function generatePlates(book: Book) {
+    validateData(book);
+    populateOriginals(book);
+    compilePlates()
+}
 
 function populateOriginals(book: Book) {
     const container = document.createElement('div');
@@ -34,7 +50,7 @@ function populateOriginals(book: Book) {
         const page = document.createElement('div');
         page.classList.add('page');
         document.querySelector('.original-pages')?.appendChild(page);
-        page.id = book.code + '-' + book.pages[i].number;
+        page.id = book.id + '-' + book.pages[i].number;
 
         for (let j = 0; j < book.pages[i].content.length; j++) {
             const plate = createPlate(book, book.pages[i], j);
@@ -46,7 +62,7 @@ function populateOriginals(book: Book) {
 function createPlate(book: Book, page: Page, index: number) {
     const plate = document.createElement('div');
     plate.classList.add('plate');
-    plate.id = book.code + '-' + page.number + '-' + index;
+    plate.id = book.id + '-' + page.number + '-' + index;
 
     const content = document.createElement('p');
     content.textContent = page.content[index];
@@ -94,10 +110,10 @@ function compilePlates() {
         }
     }
 
-    const btnPreview = document.getElementById(
-        'btn-preview'
-    ) as HTMLButtonElement;
-    btnPreview.disabled = true;
+    // const btnPreview = document.getElementById(
+    //     'btn-preview'
+    // ) as HTMLButtonElement;
+    // btnPreview.disabled = true;
     const btnDownload = document.getElementById(
         'btn-download'
     ) as HTMLButtonElement;
@@ -122,17 +138,6 @@ function createPreview(src: string, name: string) {
     return container;
 }
 
-async function downloadAll() {
-    const links = document.querySelectorAll('.preview a');
-    for (const link of links) {
-        if (link instanceof HTMLAnchorElement) {
-            link.click();
-            console.log(`downloading...`);
-        }
-    }
-    console.log(`download end`);
-}
-
 async function downloadAllZip() {
     const links = document.querySelectorAll('.preview a');
     const files = await Promise.all(
@@ -147,8 +152,7 @@ async function downloadAllZip() {
         })
     );
 
-    // https://www.npmjs.com/package/client-zip
-
     const content = await downloadZip(files).blob();
-    FileSaver.saveAs(content, 'download.zip');
+    const fileName = localStorage.getItem('bookId');
+    FileSaver.saveAs(content, `${fileName ? fileName : 'semblance-results'}.zip`);
 }
