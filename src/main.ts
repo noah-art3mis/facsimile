@@ -6,8 +6,15 @@ import { PREVIEW_SIZE, IMAGE_TYPE, MAX_LENGTH_CONTENT } from './config.ts';
 import { validateData } from './validateData.ts';
 import rechunkSentences from './utils.ts';
 
+declare global {
+    interface Window {
+        book: Book;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('fileInput')?.addEventListener('change', (e) => {
+        document.querySelector('.small-page-container')?.remove();
         getBook(e);
     });
 
@@ -24,8 +31,68 @@ document.addEventListener('DOMContentLoaded', () => {
         ?.addEventListener('click', () => downloadAllZip());
 
     document
-        .getElementById('btn-next')
-        ?.addEventListener('click', () => nextPage);
+        .getElementById('current-text')
+        ?.addEventListener('input', (event) => {
+            const text = (event.target as HTMLInputElement).value;
+            if (text) {
+                const ui = document.getElementById('ui-current-page');
+                const index = ui?.textContent;
+
+                if (index) {
+                    const page = getPageByIndex(parseInt(index));
+                    const content = page.querySelector(
+                        '.plate .plate-block .content'
+                    ) as HTMLParagraphElement;
+                    content.textContent = text;
+                } else {
+                    console.error(
+                        'The element or its text content is not found.'
+                    );
+                }
+            }
+        });
+
+    window.addEventListener(
+        'keydown',
+        (event) => {
+            if (event.defaultPrevented) {
+                return; // Do nothing if the event was already processed
+            }
+
+            switch (event.key) {
+                case 'ArrowDown':
+                    nextPage();
+                    break;
+                case 'PageDown':
+                    nextPage();
+                    break;
+                case 'ArrowUp':
+                    prevPage();
+                    break;
+                case 'PageUp':
+                    prevPage();
+                    break;
+                case 'ArrowLeft':
+                    // Do something for "left arrow" key press.
+                    break;
+                case 'ArrowRight':
+                    // Do something for "right arrow" key press.
+                    break;
+                case 'Enter':
+                    // Do something for "enter" or "return" key press.
+                    break;
+                case ' ':
+                    // Do something for "space" key press.
+                    break;
+                default:
+                    return; // Quit when this doesn't handle the key event.
+            }
+
+            // Cancel the default action to avoid it being handled twice
+            event.preventDefault();
+        },
+        true
+    );
 
     function getBook(event: Event) {
         const files = (event.target as HTMLInputElement)?.files;
@@ -35,36 +102,67 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
 
             reader.onload = function (e) {
-                const bookStr = e.target?.result;
-                const bookObj: Book = JSON.parse(bookStr as string);
-                sessionStorage.setItem('bookId', bookObj.id);
-                sessionStorage.setItem('book', JSON.stringify(bookObj));
-                sessionStorage.setItem(
-                    'bookPages',
-                    bookObj.pages.length.toString()
-                );
+                window.book = JSON.parse(e.target?.result as string);
+                validateData(window.book);
+                rechunkSentences(window.book, MAX_LENGTH_CONTENT);
+                generatePlates(window.book);
                 setNumberOfPages();
-
-                generatePlates(bookObj);
+                getPageByIndex(0).id = 'active-page';
             };
         }
     }
 
+    function nextPage() {
+        const i = currentPageIndex();
+        selectPage(i + 1);
+    }
+
+    function prevPage() {
+        const i = currentPageIndex();
+        selectPage(i - 1);
+    }
+
+    function currentPageIndex(): number {
+        const activePage = document.getElementById('active-page');
+        const pages = document.querySelectorAll('.page');
+
+        for (let i = 0; i < pages.length; i++) {
+            if (pages[i] == activePage) {
+                return i;
+            }
+        }
+        throw new Error('active page not found');
+    }
+
+    function selectPage(index: number) {
+        //remove previous
+        document.getElementById('active-page')?.removeAttribute('id');
+
+        //set next
+        const nextPage = getPageByIndex(index);
+        nextPage.id = 'active-page';
+
+        //update ui
+        const counter = document.getElementById('ui-current-page')!;
+        counter.textContent = index.toString();
+    }
+
+    function getPageByIndex(index: number) {
+        const pages = document.querySelectorAll('.page');
+        if (index === -1) index = pages.length - 1; // wrap around from -1
+        const page = pages[index % pages.length]; // wrap around from last page
+        return page;
+    }
+
     function setNumberOfPages() {
-        const totalPagesElement = document.querySelector('.total-pages');
+        const totalPagesElement = document.getElementById('ui-total-pages');
+        const pages = document.querySelectorAll('.page');
         if (totalPagesElement) {
-            const pages = sessionStorage.getItem('bookPages');
-            totalPagesElement.textContent = pages;
+            totalPagesElement.textContent = pages.length.toString();
         }
     }
 
     function generatePlates(book: Book) {
-        validateData(book);
-        rechunkSentences(book, MAX_LENGTH_CONTENT);
-        populateOriginals(book);
-    }
-
-    function populateOriginals(book: Book) {
         const container = document.createElement('div');
         container.classList.add('small-page-container');
         document.querySelector('body')?.appendChild(container);
@@ -72,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < book.pages.length; i++) {
             const page = document.createElement('div');
             page.classList.add('page');
-            page.classList.add('hidden-page');
             document.querySelector('.small-page-container')?.appendChild(page);
             page.id = book.id + '-' + book.pages[i].number;
 
@@ -116,42 +213,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function expandPlates() {
         document.documentElement.style.setProperty('--scale', '5');
-    }
-
-    function allPlatesVisible() {
-        document.querySelectorAll('.page').forEach((page) => {
-            if (page.classList.contains('hidden-page')) {
-                page.classList.remove('hidden-page');
-            }
-        });
+        
+        // https://html2canvas.hertzen.com/faq
+        if (document.documentElement.scrollHeight > 32000) {
+            console.log(document.documentElement.scrollHeight + 'bigwindow');
+            alert('Big window');
+        }
     }
 
     function compilePlates() {
-        allPlatesVisible();
         expandPlates();
 
-        const container = document.createElement('div');
-        container.classList.add('summary-pages');
-        document.querySelector('body')?.appendChild(container);
+        const container = document.querySelector('.summary-pages');
+        const pages = document.querySelectorAll('.page');
 
-        const pages = document.querySelector('.small-page-container');
-
-        for (const page of pages!.children) {
-            const _page = document.createElement('div');
-            _page.classList.add('summary-page');
-            container.appendChild(_page);
+        for (const page of pages) {
+            container?.appendChild(page);
+            (page as HTMLElement).style.display = 'flex';
 
             for (const plate of page.children) {
-                html2canvas(plate as HTMLElement).then(
+                html2canvas(plate as HTMLDivElement).then(
                     (canvas: HTMLCanvasElement) => {
                         const src = canvas.toDataURL(
                             `image/${IMAGE_TYPE}`,
                             1.0
                         );
                         const div = createPreview(src, plate.id);
-                        _page.appendChild(div);
-                        // @ts-ignore
-                        plate.style.display = 'none';
+                        page.appendChild(div);
+                        (plate as HTMLElement).style.display = 'none';
                     }
                 );
             }
@@ -185,19 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return container;
     }
 
-    function nextPage() {
-        // const currentPage = document.querySelector('.current-page');
-        // if (currentPage) {
-        //     currentPage.remove();
-        // }
-        // let n = 1;
-        // const parent = document.querySelector('.parent'); // Select the parent element
-        // const child = parent?.querySelector(`.child:nth-child(${n})`); // Select the nth child
-        // if (child) {
-        //     child.classList.remove('special'); // Remove the 'special' class
-        // }
-    }
-
     async function downloadAllZip() {
         const links = document.querySelectorAll('.preview a');
         const files = await Promise.all(
@@ -214,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // @ts-ignore
         const content = await downloadZip(files).blob();
-        const fileName = sessionStorage.getItem('bookId');
+        const fileName = window.book.id;
         FileSaver.saveAs(
             content,
             `${fileName ? fileName : 'semblance-results'}.zip`

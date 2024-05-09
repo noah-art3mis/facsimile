@@ -20,6 +20,7 @@
             <p class="subheading">an AUTOMATON tool</p>
         </div>
         <input type="file" id="fileInput" accept=".json" />
+        <input type="text" id="current-text" placeholder="Select book" />
         <div class="buttons">
             <!-- <button id="btn-expand">expand</button> -->
             <button id="btn-preview">compile</button>
@@ -29,13 +30,13 @@
         </div>
         <div class="interface">
             <div class="page-counter">
-                <p class="current-page"></p>
+                <p id="ui-current-page"></p>
                 <p>/</p>
-                <p class="total-pages"></p>
+                <p id="ui-total-pages"></p>
             </div>
             <button class="btn-next">Next page</button>
         </div>
-
+        <div class="summary-pages"></div>
         <script type="module" src="/src/main.ts"></script>
     </body>
 </html>

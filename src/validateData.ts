@@ -7,7 +7,6 @@ export function validateData(data: Book) {
     notTooLong(data);
 }
 
-
 function isBook(data: Book) {
     if (!data.author) {
         const message = `Book author is missing`;
@@ -30,13 +29,11 @@ function isBook(data: Book) {
     }
 }
 
-
 function arePagesUnique(data: Book) {
     const pageNumbers = new Set<string>();
     for (const page of data.pages) {
         if (pageNumbers.has(page.number)) {
             const message = `Page number ${page.number} is not unique`;
-            alert(message);
             console.log(message);
         }
         pageNumbers.add(page.number);
@@ -58,8 +55,15 @@ function endsWithPunctuation(data: Book) {
                 continue;
             }
 
+            if (plate.endsWith('"')) {
+                continue;
+            }
+
+            if (plate.endsWith("'")) {
+                continue;
+            }
+
             const message = `${page.number} should end with punctuation`;
-            alert(message);
             console.log(message);
         }
     }

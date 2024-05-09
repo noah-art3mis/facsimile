@@ -44,26 +44,27 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 
 ## TODO
 
+-   number on counters is slightly wrong
+-   having more than 6 plates per pages breaks it
+-   check if no plate content is over limit. say what is the biggest one
 -   pallete tools
+
     -   combine all cases
     -   preview
     -   invert colors
     -   add gradients
--   weird centering issues with the plates
--   add manual sentence rechunking
--   check content for ai api errors
--   set background and text color with ui
--   ui to change number of sentences per page
--   ui to change text size
--   change one page without having to recompile everything
--   check if over pixel limit
-    -   https://html2canvas.hertzen.com/faq
-    -   32k px height
 
 ## Palletes
 
-### ksi
+    -   ksi
+        - #434343
+        - #e6dad3
+        - #3d4555
 
-        /* #434343 */
-        /* #e6dad3 */
-        /* #3d4555 */
+    - fg
+        - #CDC0BA
+        - #734C48
+        - #F2D0A7
+        - #9B95BF
+        - #37262C
+        - #836153

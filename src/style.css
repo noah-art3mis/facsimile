@@ -5,6 +5,13 @@
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
+    /* - #CDC0BA
+    - #734C48
+    - #F2D0A7
+    - #9B95BF
+    - #37262C
+    - #836153 */
+
     /* --plate-background-gradient: linear-gradient(0deg, var(--color-d), var(--color-d)); */
     --plate-background-color: #e6dad3;
     --plate-text-color: #434343;
@@ -28,11 +35,15 @@ input {
     flex-direction: row;
     align-items: center;
     justify-content: left;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
     gap: 4rem;
+    display: none;
 }
 
-.hidden-page {
-    display: none;
+#active-page {
+    display: flex;
 }
 
 .summary-pages {
@@ -40,6 +51,8 @@ input {
     flex-direction: column;
     justify-content: flex-start;
     gap: 4rem;
+    margin: 1rem;
+    align-items: center;
 }
 
 .summary-page {
@@ -53,7 +66,7 @@ input {
 .plate {
     width: calc(216px * var(--scale));
     height: calc(270px * var(--scale));
-    font-size: calc(12px * var(--scale));
+    font-size: calc(12.5px * var(--scale));
     line-height: 1.4;
     font-family: 'Cardo', serif;
 
