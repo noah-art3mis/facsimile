@@ -1,7 +1,7 @@
-export const CONTRAST_THRESHOLD = 3;
-export const SHUFFLE_PLATES = true;
+export const GRADIENT_SIZE = 2;
+export const CONTRAST_THRESHOLD = 5;
 export const CSS_FORMAT = true;
-export const GRADIENT_MODE = false;
+export const SHUFFLE_PLATES = false;
 export const PALETTE = [
     '#CDC0BA',
     '#734C48',

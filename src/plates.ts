@@ -1,6 +1,6 @@
 import { fakeBook } from './mocks.ts';
 
-export function generatePlateWithColor(bg: string, c: string): HTMLDivElement {
+export function generatePlateWithColor(colors: string[]): HTMLDivElement {
     //get random content
     const pageIndex = Math.floor(Math.random() * fakeBook.pages.length);
     const sentenceIndex = Math.floor(
@@ -13,10 +13,17 @@ export function generatePlateWithColor(bg: string, c: string): HTMLDivElement {
     plate.classList.add('palette-plate');
 
     //set colors
-    plate.style.backgroundColor = bg;
-    plate.style.color = c;
+    plate.style.color = colors[0];
+    if (colors.length === 2) {
+        plate.style.backgroundColor = colors[1];
+    } else {
+        const otherColors = colors.slice(1);
+        const gradient = `linear-gradient(0deg, ${otherColors.join(', ')})`;
+        plate.style.backgroundImage = gradient;
+    }
     return plate;
 }
+
 function createPlate(_author: string, _title: string, _content: string) {
     const plate = document.createElement('div');
     plate.classList.add('plate');

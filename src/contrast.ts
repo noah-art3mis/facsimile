@@ -1,24 +1,43 @@
+export function isLowContrastGradient(
+    hex1: string,
+    hex2: string[],
+    CONTRAST_THRESHOLD: number
+) {
+    const rgb1 = hexToRgb(hex1);
+
+    for (let i = 0; i < hex2.length; i++) {
+        if (contrast(rgb1, hexToRgb(hex2[i])) < CONTRAST_THRESHOLD) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export function isLowContrast(
     hex1: string,
     hex2: string,
     CONTRAST_THRESHOLD: number
 ) {
-    const rgb1 = hexToRgb(hex1) || [0, 0, 255];
-    const rgb2 = hexToRgb(hex2) || [255, 0, 0];
+    const rgb1 = hexToRgb(hex1);
+    const rgb2 = hexToRgb(hex2);
 
     return contrast(rgb1, rgb2) < CONTRAST_THRESHOLD;
 }
 
-function hexToRgb(hex: string): number[] | null {
+function hexToRgb(hex: string): number[] {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-        ? [
-              parseInt(result[1], 16),
-              parseInt(result[2], 16),
-              parseInt(result[3], 16),
-          ]
-        : null;
+
+    if (!result) {
+        throw new Error('Invalid hex color');
+    }
+
+    return [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16),
+    ];
 }
+
 function contrast(rgb1: number[], rgb2: number[]): number {
     // @ts-ignore
     var lum1 = luminance(...rgb1);

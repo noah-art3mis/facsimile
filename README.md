@@ -10,11 +10,12 @@ Part of Semblance, which is part of AUTOMATON, the simulacrum automation package
 
 1.  set configs in `configs.ts`:
 
-    -   CONTRAST_THRESHOLD: value for skipping plates (3 ~ 4.5 should be good)
-    -   SHUFFLE_PLATES: if true, shuffle plates
-    -   CSS_FORMAT: if true, generates results in css format
     -   PALETTE: your palette
-    -   GRADIENT_MODE: WIP
+    -   GRADIENT_SIZE: 1 for single color background, 2 for two colors, etc
+    -   CONTRAST_THRESHOLD: plates with lower contrast are skipped (2 ~ 8 recommended)
+        -   for higher gradient sizes (e.g. 3, 4), a lower threshold is recommended
+    -   CSS_FORMAT: if true, generates results in css format
+    -   SHUFFLE_PLATES: if true, shuffle plates
 
 1.  open the client: `npm run dev -- --open`.
 
@@ -30,22 +31,18 @@ Part of Semblance, which is part of AUTOMATON, the simulacrum automation package
 
     ksi
 
-            [
                 '#434343',
                 '#e6dad3',
                 '#3d4555',
-            ];
 
     fg
 
-            [
                 '#CDC0BA',
                 '#734C48',
                 '#F2D0A7',
                 '#9B95BF',
                 '#37262C',
                 '#836153',
-            ];
 
 from which i chose:
 
@@ -66,4 +63,4 @@ from which i chose:
 
 ## TODO
 
--   add gradients
+-   fit output for use with gradients

@@ -1,18 +1,19 @@
 import {
     CONTRAST_THRESHOLD,
     CSS_FORMAT,
+    GRADIENT_SIZE,
     PALETTE,
     SHUFFLE_PLATES,
 } from './config.ts';
-import { isLowContrast } from './contrast.ts';
+import { getPermutations, filterColorsGradient } from './colors.ts';
 import { generatePlateWithColor } from './plates.ts';
 import { copyTextToClipboard } from './utils.ts';
 import { shuffle } from './utils.ts';
 
 document.addEventListener('DOMContentLoaded', () => {
-    //generate plates with colors
-    const colorPairs: string[][] = getColorPairs(PALETTE);
-    generatePlatesWithColors(colorPairs);
+    let colors = getPermutations(PALETTE, GRADIENT_SIZE + 1);
+    colors = filterColorsGradient(colors, CONTRAST_THRESHOLD);
+    generatePlatesWithColors(colors);
 
     //get palette from remaining pages
     document.getElementById('get-palette')?.addEventListener('click', () => {
@@ -23,23 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function getColorPairs(palette: string[]): string[][] {
-    const colorPairs = [];
-    for (let i = 0; i < palette.length; i++) {
-        for (let j = 0; j < palette.length; j++) {
-            if (i === j) continue;
-            colorPairs.push([palette[i], palette[j]]);
-        }
-    }
-    return colorPairs;
-}
-
-function generatePlatesWithColors(colorPairs: string[][]) {
+function generatePlatesWithColors(colors: string[][]) {
     const plates = [];
-    for (let i = 0; i < colorPairs.length; i++) {
-        const [bg, c] = colorPairs[i];
-        if (isLowContrast(bg, c, CONTRAST_THRESHOLD)) continue;
-        const plate = generatePlateWithColor(bg, c);
+    for (let i = 0; i < colors.length; i++) {
+        const plate = generatePlateWithColor(colors[i]);
         plate.addEventListener('click', () => {
             plate.remove();
         });
@@ -52,6 +40,7 @@ function generatePlatesWithColors(colorPairs: string[][]) {
         document.querySelector('.palette-plate-container')?.appendChild(plate);
     });
 }
+
 function getResult() {
     let pairs: string[][] = [];
     document.querySelectorAll('.plate').forEach((plate) => {
