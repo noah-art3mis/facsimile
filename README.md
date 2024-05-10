@@ -44,17 +44,10 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 
 ## TODO
 
--   number on counters is slightly wrong
--   having more than 6 plates per pages breaks it
--   check if no plate content is over limit. say what is the biggest one
--   pallete tools
+-   randomize places
+-   add gradients
 
-    -   combine all cases
-    -   preview
-    -   invert colors
-    -   add gradients
-
-## Palletes
+## palettes
 
     -   ksi
         - #434343
