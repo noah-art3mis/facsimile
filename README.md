@@ -1,6 +1,8 @@
 # Pallete
 
-Helps you pick colors for simulacrum plates. Part of Semblance, which is part of AUTOMATON, the simulacrum automation package.
+Helps you pick colors for simulacrum plates.
+
+Part of Semblance, which is part of AUTOMATON, the simulacrum automation package.
 
 ## How to
 
@@ -12,6 +14,7 @@ Helps you pick colors for simulacrum plates. Part of Semblance, which is part of
     -   SHUFFLE_PLATES: if true, shuffle plates
     -   CSS_FORMAT: if true, generates results in css format
     -   PALETTE: your palette
+    -   GRADIENT_MODE: WIP
 
 1.  open the client: `npm run dev -- --open`.
 
