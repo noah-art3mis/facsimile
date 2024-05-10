@@ -14,15 +14,21 @@
         />
         <title>Semblance - AUTOMATON</title>
     </head>
+    
     <body>
         <div class="header">
             <h1>Semblance</h1>
             <div class="subheading">
                 <p>an <span class="smallcaps">AUTOMATON</span> tool</p>
+                <br />
                 <p>palette mode</p>
             </div>
         </div>
-        <button id="get-palette">Get palette</button>
+        <div class="dashboard">
+            <button id="get-palette">Get palettes</button>
+            <p id="result-message">Remaining palettes copied to clipboard!</p>
+            <p>Click on a plate to remove it</p>
+        </div>
         <div class="palette-plate-container"></div>
         <script type="module" src="/src/main.ts"></script>
     </body>

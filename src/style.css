@@ -11,6 +11,15 @@
     --scale: 1.5;
 }
 
+#result-message {
+    display: none;
+}
+
+.dashboard {
+    line-height: 1.5;
+    margin: 2rem;
+}
+
 .palette-plate-container {
     display: flex;
     align-items: center;
@@ -69,10 +78,15 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    margin: 3rem;
+}
+
+h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
 }
 
 .subheading {
-    padding: 0 0 3rem 0rem;
     line-height: 1.2;
 }
 
@@ -99,17 +113,10 @@ body {
     min-height: 100vh;
 }
 
-h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
-    padding: 3rem 3rem 0 3rem;
-}
-
 button {
     border-radius: 8px;
     border: 1px solid transparent;
     padding: 0.6em 1.2em;
-    margin: 2em;
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;

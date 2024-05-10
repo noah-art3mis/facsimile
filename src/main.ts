@@ -1,57 +1,29 @@
-import { isLowContrast } from './contrastUtils.ts';
-import { fakeBook } from './mocks.ts';
-
-export const palette = [
-    '#CDC0BA',
-    '#734C48',
-    '#F2D0A7',
-    '#9B95BF',
-    '#37262C',
-    '#836153',
-];
+import {
+    CONTRAST_THRESHOLD,
+    CSS_FORMAT,
+    PALETTE,
+    SHUFFLE_PLATES,
+} from './config.ts';
+import { isLowContrast } from './contrast.ts';
+import { generatePlateWithColor } from './plates.ts';
+import { copyTextToClipboard } from './utils.ts';
+import { shuffle } from './utils.ts';
 
 document.addEventListener('DOMContentLoaded', () => {
-    //get palette from remaining pages
-    document.getElementById('get-palette')?.addEventListener('click', (e) => {
-        let pairs: string[][] = [];
-        document.querySelectorAll('.plate').forEach((plate) => {
-            const bg = (plate as HTMLDivElement).style.backgroundColor;
-            const c = (plate as HTMLDivElement).style.color;
-            const pair = [bg, c];
-            pairs.push(pair);
-        });
-
-        //use either this or just get the pairs directly
-        let text = '';
-        pairs.forEach((pair) => {
-            console.log(pair);
-            text += `
-        --plate-background-color: ${pair[0]};
-        --plate-text-color: ${pair[1]};
-        
-        `;
-        });
-        console.log(text);
-    });
-
     //generate plates with colors
-    const colorPairs: string[][] = getColorPairs();
-    for (let i = 0; i < colorPairs.length; i++) {
-        const [bg, c] = colorPairs[i];
-        if (isLowContrast(bg, c)) continue;
-        const plate = generatePlateWithColor(bg, c);
-        document.querySelector('.palette-plate-container')?.appendChild(plate);
-    }
+    const colorPairs: string[][] = getColorPairs(PALETTE);
+    generatePlatesWithColors(colorPairs);
 
-    //remove plate if clicked
-    document.querySelectorAll('.palette-plate').forEach((plate) => {
-        plate.addEventListener('click', () => {
-            plate.remove()
-        });
+    //get palette from remaining pages
+    document.getElementById('get-palette')?.addEventListener('click', () => {
+        let pairs: string[][] = getResult();
+        let text = formatResult(pairs);
+        copyTextToClipboard(text);
+        displayMessage();
     });
 });
 
-function getColorPairs(): string[][] {
+function getColorPairs(palette: string[]): string[][] {
     const colorPairs = [];
     for (let i = 0; i < palette.length; i++) {
         for (let j = 0; j < palette.length; j++) {
@@ -62,50 +34,55 @@ function getColorPairs(): string[][] {
     return colorPairs;
 }
 
-function generatePlateWithColor(bg: string, c: string): HTMLDivElement {
-    //get random content
-    const pageIndex = Math.floor(Math.random() * fakeBook.pages.length);
-    const sentenceIndex = Math.floor(
-        Math.random() * fakeBook.pages[0].content.length
-    );
-    const content = fakeBook.pages[pageIndex].content[sentenceIndex];
-
-    //create plate
-    const plate = createPlate(fakeBook.author, fakeBook.title, content);
-    plate.classList.add('palette-plate');
-
-    //set colors
-    plate.style.backgroundColor = bg;
-    plate.style.color = c;
-    return plate;
+function generatePlatesWithColors(colorPairs: string[][]) {
+    const plates = [];
+    for (let i = 0; i < colorPairs.length; i++) {
+        const [bg, c] = colorPairs[i];
+        if (isLowContrast(bg, c, CONTRAST_THRESHOLD)) continue;
+        const plate = generatePlateWithColor(bg, c);
+        plate.addEventListener('click', () => {
+            plate.remove();
+        });
+        plates.push(plate);
+    }
+    if (SHUFFLE_PLATES) {
+        shuffle(plates);
+    }
+    plates.forEach((plate) => {
+        document.querySelector('.palette-plate-container')?.appendChild(plate);
+    });
+}
+function getResult() {
+    let pairs: string[][] = [];
+    document.querySelectorAll('.plate').forEach((plate) => {
+        const bg = (plate as HTMLDivElement).style.backgroundColor;
+        const c = (plate as HTMLDivElement).style.color;
+        const pair = [bg, c];
+        pairs.push(pair);
+    });
+    return pairs;
 }
 
-function createPlate(_author: string, _title: string, _content: string) {
-    const plate = document.createElement('div');
-    plate.classList.add('plate');
+function formatResult(pairs: string[][]) {
+    let text = '';
+    if (CSS_FORMAT) {
+        pairs.forEach((pair) => {
+            console.log(pair);
+            text += `
+            --plate-background-color: ${pair[0]};
+            --plate-text-color: ${pair[1]};
+            
+            `;
+        });
+    } else {
+        text = JSON.stringify(pairs);
+    }
+    return text;
+}
 
-    const plateBlock = document.createElement('div');
-    plateBlock.classList.add('plate-block');
-    plate.appendChild(plateBlock);
-
-    const content = document.createElement('p');
-    content.textContent = _content;
-    content.classList.add('content');
-    plateBlock.appendChild(content);
-
-    const reference = document.createElement('div');
-    reference.classList.add('reference');
-    plateBlock.appendChild(reference);
-
-    const author = document.createElement('p');
-    author.textContent = _author;
-    author.classList.add('author');
-    reference.appendChild(author);
-
-    const title = document.createElement('p');
-    title.textContent = _title;
-    title.classList.add('title');
-    reference.appendChild(title);
-
-    return plate;
+function displayMessage() {
+    const message = document.getElementById('result-message');
+    if (message) {
+        message.style.display = 'block';
+    }
 }

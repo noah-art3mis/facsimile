@@ -1,63 +1,66 @@
-# Semblance
+# Pallete
 
-Possible names:
-
--   Demeanor
--   Semblance
--   Depiction
--   Façade
--   Facsimile
--   Mirage
--   Likenessnp
--   Sillhouette
--   Effigy
-
-        \\wsl$\Ubuntu\home\art3mis\projects\socratic\socratic-apothecary\output
-
-Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2canvas.hertzen.com/). Part of AUTOMATON, the simulacrum automation package.
-
--   [ ] https://gist.github.com/ricardoleme/8a4578493cf345d3fea381c796007f08
+Helps you pick colors for simulacrum plates. Part of Semblance, which is part of AUTOMATON, the simulacrum automation package.
 
 ## How to
 
-1.  get a book file. a book file is a json file in the following format:
+1.  get a palette. I usually do by uploading a book cover [here](https://color.adobe.com/create/image-gradient) .
 
-        author: string;
-        title: string;
-        code: string;
-        pages: Array<Page>;
+1.  set configs in `configs.ts`:
 
-    where a page is
+    -   CONTRAST_THRESHOLD: value for skipping plates (3 ~ 4.5 should be good)
+    -   SHUFFLE_PLATES: if true, shuffle plates
+    -   CSS_FORMAT: if true, generates results in css format
+    -   PALETTE: your palette
 
-        number: string;
-        content: Array<string>;
+1.  open the client: `npm run dev -- --open`.
 
-1.  set background and text color in `src/style.css`
-    -   https://color.adobe.com/create/image-gradient
-    -   https://color.adobe.com/create/image
-    -   https://cssgradient.io/
-1.  `npm run dev` to start the server and then open the browser
-1.  upload the file using the interface.
-1.  wait for it to process all pages
-1.  press `download all`
-1.  if you want to use it again, reload the page
+    -   every permutation is generated. low contrast ones are skipped according to `CONTRAST_THRESHOLD`.
+    -   every time you reload the page, sentences are randomly assigned. if `SHUFFLE` is on, plates are shuffled.
 
-## TODO
+1.  click the plates you don't want. they will be removed from the page.
 
--   randomize places
--   add gradients
+1.  click `Get palette`
+    -   results will be in the console. format depends on `CSS_FORMAT`
 
 ## palettes
 
-    -   ksi
-        - #434343
-        - #e6dad3
-        - #3d4555
+    ksi
 
-    - fg
-        - #CDC0BA
-        - #734C48
-        - #F2D0A7
-        - #9B95BF
-        - #37262C
-        - #836153
+            [
+                '#434343',
+                '#e6dad3',
+                '#3d4555',
+            ];
+
+    fg
+
+            [
+                '#CDC0BA',
+                '#734C48',
+                '#F2D0A7',
+                '#9B95BF',
+                '#37262C',
+                '#836153',
+            ];
+
+from which i chose:
+
+        --plate-background-color: rgb(115, 76, 72);
+        --plate-text-color: rgb(242, 208, 167);
+
+
+        --plate-background-color: rgb(55, 38, 44);
+        --plate-text-color: rgb(242, 208, 167);
+
+
+        --plate-background-color: rgb(55, 38, 44);
+        --plate-text-color: rgb(155, 149, 191);
+
+
+        --plate-background-color: rgb(131, 97, 83);
+        --plate-text-color: rgb(242, 208, 167);
+
+## TODO
+
+-   add gradients

@@ -1,9 +1,14 @@
-export function isLowContrast(hex1: string, hex2: string) {
+export function isLowContrast(
+    hex1: string,
+    hex2: string,
+    CONTRAST_THRESHOLD: number
+) {
     const rgb1 = hexToRgb(hex1) || [0, 0, 255];
     const rgb2 = hexToRgb(hex2) || [255, 0, 0];
 
-    return contrast(rgb1, rgb2) < 3;
+    return contrast(rgb1, rgb2) < CONTRAST_THRESHOLD;
 }
+
 function hexToRgb(hex: string): number[] | null {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
