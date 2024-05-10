@@ -84,5 +84,8 @@ function displayMessage() {
     const message = document.getElementById('result-message');
     if (message) {
         message.style.display = 'block';
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, 1250);
     }
 }

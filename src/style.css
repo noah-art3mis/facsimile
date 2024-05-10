@@ -5,7 +5,7 @@
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
-    /* --plate-background-gradient: linear-gradient(0deg, var(--color-d), var(--color-d)); */
+    --plate-background-gradient: linear-gradient(0deg, var(--color-d), var(--color-d));
     --plate-background-color: red;
     --plate-text-color: blue;
     --scale: 1.5;
@@ -36,7 +36,7 @@
     line-height: 1.4;
     font-family: 'Cardo', serif;
 
-    /* background-image: var(--plate-background); */
+    background-image: var(--plate-background-gradient);
     background: var(--plate-background-color);
     color: var(--plate-text-color);
 
