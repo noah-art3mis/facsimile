@@ -46,21 +46,19 @@ Part of Semblance, which is part of AUTOMATON, the simulacrum automation package
 
 from which i chose:
 
-        --plate-background-color: rgb(115, 76, 72);
-        --plate-text-color: rgb(242, 208, 167);
+        color: rgb(55, 38, 44)
+        background-image: linear-gradient(0deg, rgb(242, 208, 167), rgb(155, 149, 191), rgb(155, 149, 191))
 
+        color: rgb(55, 38, 44)
+        background-image: linear-gradient(0deg, rgb(155, 149, 191), rgb(242, 208, 167))
 
-        --plate-background-color: rgb(55, 38, 44);
-        --plate-text-color: rgb(242, 208, 167);
-
-
-        --plate-background-color: rgb(55, 38, 44);
-        --plate-text-color: rgb(155, 149, 191);
-
-
-        --plate-background-color: rgb(131, 97, 83);
-        --plate-text-color: rgb(242, 208, 167);
+        color: rgb(242, 208, 167);
+        background-image: rgb(115, 76, 72);
 
 ## TODO
 
--   fit output for use with gradients
+-   move configs to ui
+-   select ones you want instead
+-   convert output to hex
+-   when only 2 colors results say 'background-image' but should be background-color
+-   deploy

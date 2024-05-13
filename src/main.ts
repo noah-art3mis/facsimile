@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //get palette from remaining pages
     document.getElementById('get-palette')?.addEventListener('click', () => {
-        let pairs: string[][] = getResult();
-        let text = formatResult(pairs);
-        copyTextToClipboard(text);
+        const palettes: string[][] = getResult();
+        const result: string = formatResult(palettes);
+        copyTextToClipboard(result);
         displayMessage();
     });
 });
@@ -42,30 +42,28 @@ function generatePlatesWithColors(colors: string[][]) {
 }
 
 function getResult() {
-    let pairs: string[][] = [];
+    let palettes: string[][] = [];
     document.querySelectorAll('.plate').forEach((plate) => {
-        const bg = (plate as HTMLDivElement).style.backgroundColor;
-        const c = (plate as HTMLDivElement).style.color;
-        const pair = [bg, c];
-        pairs.push(pair);
+        const c: string = (plate as HTMLDivElement).style.color;
+        let bg: string = (plate as HTMLDivElement).style.backgroundImage;
+
+        if (!bg) {
+            bg = (plate as HTMLDivElement).style.backgroundColor;
+        }
+
+        palettes.push([c, bg]);
     });
-    return pairs;
+    return palettes;
 }
 
-function formatResult(pairs: string[][]) {
-    let text = '';
-    if (CSS_FORMAT) {
-        pairs.forEach((pair) => {
-            console.log(pair);
-            text += `
-            --plate-background-color: ${pair[0]};
-            --plate-text-color: ${pair[1]};
-            
-            `;
-        });
-    } else {
-        text = JSON.stringify(pairs);
-    }
+function formatResult(palettes: string[][]) {
+    let text: string = '';
+    palettes.forEach((palette) => {
+        const text_color: string = palette[0];
+        const bg_color: string = palette[1];
+        const item = `color: ${text_color};\nbackground-image: ${bg_color};\n\n`;
+        text += item;
+    });
     return text;
 }
 

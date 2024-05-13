@@ -11,6 +11,7 @@ export function copyTextToClipboard(text: string) {
         .writeText(text)
         .then(() => {
             console.log('Palettes copied to clipboard!');
+            console.log(text);
         })
         .catch((err) => {
             alert(`Failed to copy text: ${err}`);
