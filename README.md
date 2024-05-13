@@ -18,6 +18,13 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 
 -   [ ] https://gist.github.com/ricardoleme/8a4578493cf345d3fea381c796007f08
 
+
+Part of AUTOMATON, the simulacrum automation package:
+- [Apothecary](https://github.com/noah-art3mis/apothecary) (text extraction and cleanup)
+- [Mirage](https://github.com/noah-art3mis/mirage) (palette chooser)
+- [Semblance](https://github.com/noah-art3mis/semblance) (image generation)
+
+- 
 ## How to
 
 1.  get a book file. a book file is a json file in the following format:
