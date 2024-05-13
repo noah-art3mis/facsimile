@@ -33,12 +33,14 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
     -   https://cssgradient.io/
 1.  `npm run dev` to start the server and then open the browser
 1.  upload the file using the interface.
-1.  wait for it to process all pages
+1.  use `page up` and `page down` to scan resulting images. edit parameters as needed
+1.  if everything is ok, press `compile` and wait for it to process all images.
 1.  press `download all`
 1.  if you want to use it again, reload the page
 
 ## TODO
 
+-   notification when all pages are compiled
 -   convert md to html
 -   number on counters is slightly wrong
 -   having more than 6 plates per pages breaks it
