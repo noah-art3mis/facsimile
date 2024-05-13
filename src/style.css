@@ -5,16 +5,16 @@
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
-    /* - #CDC0BA
-    - #734C48
-    - #F2D0A7
-    - #9B95BF
-    - #37262C
-    - #836153 */
+    --c1: rgb(55, 38, 44);
+    --c2: linear-gradient(
+        180deg,
+        rgb(242, 208, 167),
+        rgb(242, 208, 167),
+        rgb(155, 149, 191)
+    );
 
-    /* --plate-background-gradient: linear-gradient(0deg, var(--color-d), var(--color-d)); */
-    --plate-background-color: #e6dad3;
-    --plate-text-color: #434343;
+    --plate-text-color: var(--c1);
+    --plate-background: var(--c2);
     --scale: 1.5;
 }
 
@@ -66,13 +66,13 @@ input {
 .plate {
     width: calc(216px * var(--scale));
     height: calc(270px * var(--scale));
-    font-size: calc(12.5px * var(--scale));
+    font-size: calc(12px * var(--scale));
     line-height: 1.4;
     font-family: 'Cardo', serif;
 
-    /* background-image: var(--plate-background); */
-    background: var(--plate-background-color);
     color: var(--plate-text-color);
+    background: var(--plate-background);
+    background-image: var(--plate-background);
 
     .plate-block {
         font-size: inherit;

@@ -4,15 +4,10 @@ Possible names:
 
 -   Demeanor
 -   Semblance
--   Depiction
--   Façade
 -   Facsimile
 -   Mirage
--   Likenessnp
+-   Likeness
 -   Sillhouette
--   Effigy
-
-        \\wsl$\Ubuntu\home\art3mis\projects\socratic\socratic-apothecary\output
 
 Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2canvas.hertzen.com/). Part of AUTOMATON, the simulacrum automation package.
 
@@ -44,27 +39,19 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 
 ## TODO
 
+-   convert md to html
 -   number on counters is slightly wrong
 -   having more than 6 plates per pages breaks it
 -   check if no plate content is over limit. say what is the biggest one
--   pallete tools
 
-    -   combine all cases
-    -   preview
-    -   invert colors
-    -   add gradients
+##
 
-## Palletes
+-   fg
 
-    -   ksi
-        - #434343
-        - #e6dad3
-        - #3d4555
-
-    - fg
-        - #CDC0BA
-        - #734C48
-        - #F2D0A7
-        - #9B95BF
-        - #37262C
-        - #836153
+          --c1: rgb(55, 38, 44);
+          --c2: linear-gradient(
+              180deg,
+              rgb(242, 208, 167),
+              rgb(242, 208, 167),
+              rgb(155, 149, 191)
+          );
