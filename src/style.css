@@ -1,20 +1,16 @@
 :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: 'Cardo', cursive;
 
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
 
-    --c1: rgb(55, 38, 44);
-    --c2: linear-gradient(
-        180deg,
-        rgb(242, 208, 167),
-        rgb(242, 208, 167),
-        rgb(155, 149, 191)
-    );
+    --c1: rgb(196, 185, 179);
+    --c2: linear-gradient(0deg, rgb(67, 67, 67), rgb(67, 67, 67));
 
     --plate-text-color: var(--c1);
     --plate-background: var(--c2);
+    --text-size: 13px;
     --scale: 1.5;
 }
 
@@ -66,9 +62,9 @@ input {
 .plate {
     width: calc(216px * var(--scale));
     height: calc(270px * var(--scale));
-    font-size: calc(12px * var(--scale));
+    font-size: calc(var(--text-size) * var(--scale));
+    letter-spacing: 0.01em;
     line-height: 1.4;
-    font-family: 'Cardo', serif;
 
     color: var(--plate-text-color);
     background: var(--plate-background);
@@ -150,7 +146,6 @@ button {
     margin: 2em;
     font-size: 1em;
     font-weight: 500;
-    font-family: inherit;
     background-color: #1a1a1a;
     cursor: pointer;
     transition: border-color 0.25s;

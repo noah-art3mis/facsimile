@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = function (e) {
                 window.book = JSON.parse(e.target?.result as string);
                 validateData(window.book);
-                rechunkSentences(window.book, MAX_LENGTH_CONTENT);
+                // rechunkSentences(window.book, MAX_LENGTH_CONTENT);
                 generatePlates(window.book);
                 setNumberOfPages();
                 getPageByIndex(0).id = 'active-page';
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function expandPlates() {
         document.documentElement.style.setProperty('--scale', '5');
-        
+
         // https://html2canvas.hertzen.com/faq
         if (document.documentElement.scrollHeight > 32000) {
             console.log(document.documentElement.scrollHeight + 'bigwindow');
@@ -222,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function compilePlates() {
+        document.body.style.cursor = 'wait';
         expandPlates();
 
         const container = document.querySelector('.summary-pages');
@@ -254,6 +255,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'btn-download'
         ) as HTMLButtonElement;
         btnDownload.disabled = false;
+
+        document.body.style.cursor = 'default';
     }
 
     function createPreview(src: string, name: string) {
@@ -279,10 +282,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const files = await Promise.all(
             Array.from(links).map(async (link: Element) => {
                 const name = link.getAttribute('download');
+                const folder = name!.split('-')[0] + name!.split('-')[1];
+                const name_final = folder + '/' + name;
                 if (link instanceof HTMLAnchorElement) {
                     const response = await fetch(link.href);
                     const blob = await response.blob();
-                    return { name: name, input: blob };
+                    return { name: name_final, input: blob };
                 }
                 return null;
             })

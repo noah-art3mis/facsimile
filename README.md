@@ -13,13 +13,14 @@ Generates simulacrum plates using HTML and CSS using [html2canvas](https://html2
 
 -   [ ] https://gist.github.com/ricardoleme/8a4578493cf345d3fea381c796007f08
 
-
 Part of AUTOMATON, the simulacrum automation package:
-- [Apothecary](https://github.com/noah-art3mis/apothecary) (text extraction and cleanup)
-- [Mirage](https://github.com/noah-art3mis/mirage) (palette chooser)
-- [Semblance](https://github.com/noah-art3mis/semblance) (image generation)
 
-- 
+-   [Apothecary](https://github.com/noah-art3mis/apothecary) (text extraction and cleanup)
+-   [Mirage](https://github.com/noah-art3mis/mirage) (palette chooser)
+-   [Semblance](https://github.com/noah-art3mis/semblance) (image generation)
+
+-
+
 ## How to
 
 1.  get a book file. a book file is a json file in the following format:
@@ -38,7 +39,7 @@ Part of AUTOMATON, the simulacrum automation package:
     -   https://color.adobe.com/create/image-gradient
     -   https://color.adobe.com/create/image
     -   https://cssgradient.io/
-1.  `npm run dev` to start the server and then open the browser
+1.  `npm run dev -- --open` to start the server and then open the browser
 1.  upload the file using the interface.
 1.  use `page up` and `page down` to scan resulting images. edit parameters as needed
 1.  if everything is ok, press `compile` and wait for it to process all images.
@@ -47,20 +48,6 @@ Part of AUTOMATON, the simulacrum automation package:
 
 ## TODO
 
--   notification when all pages are compiled
--   convert md to html
--   number on counters is slightly wrong
--   having more than 6 plates per pages breaks it
--   check if no plate content is over limit. say what is the biggest one
-
-##
-
--   fg
-
-          --c1: rgb(55, 38, 44);
-          --c2: linear-gradient(
-              180deg,
-              rgb(242, 208, 167),
-              rgb(242, 208, 167),
-              rgb(155, 149, 191)
-          );
+-   add loading to mouse
+-   fix counters
+-   add scrolling when a page has more than 6 plates
