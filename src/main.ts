@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .getElementById('btn-download')
         ?.addEventListener('click', () => downloadAllZip());
 
-
     window.addEventListener(
         'keydown',
         (event) => {
@@ -253,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fileName = window.book.id;
         FileSaver.saveAs(
             content,
-            `${fileName ? fileName : 'semblance-results'}.zip`
+            `${fileName ? fileName : 'facsimile-results'}.zip`
         );
     }
 });
