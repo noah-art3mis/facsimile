@@ -2,9 +2,9 @@ import html2canvas from 'html2canvas';
 import { downloadZip } from 'client-zip';
 import FileSaver from 'file-saver';
 import { Book, Page } from './types.ts';
-import { PREVIEW_SIZE, IMAGE_TYPE, MAX_LENGTH_CONTENT } from './config.ts';
+import { PREVIEW_SIZE, IMAGE_TYPE } from './config.ts';
 import { validateData } from './validateData.ts';
-import rechunkSentences from './utils.ts';
+import { initializePageCounter, selectPage } from './navigation.ts';
 
 declare global {
     interface Window {
@@ -13,14 +13,58 @@ declare global {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    let currentPage = -1;
+
     document.getElementById('fileInput')?.addEventListener('change', (e) => {
         document.querySelector('.small-page-container')?.remove();
         getBook(e);
     });
 
-    // document
-    //     .getElementById('btn-expand')
-    //     ?.addEventListener('click', expandPlates);
+    function getBook(event: Event) {
+        const files = (event.target as HTMLInputElement)?.files;
+        if (files && files.length > 0) {
+            const file: File = files[0];
+            const reader = new FileReader();
+            reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
+
+            reader.onload = function (e) {
+                window.book = JSON.parse(e.target?.result as string);
+                validateData(window.book);
+                generatePlates(window.book);
+                initializePageCounter();
+                currentPage = 1;
+                const firstPage = document.querySelectorAll('.page')[0];
+                firstPage.id = 'active-page';
+            };
+        }
+    }
+
+    document
+        .getElementById('color-text')
+        ?.addEventListener('change', (e) => updateTextColor(e));
+
+    function updateTextColor(event: Event) {
+        const targetElement = event.target as HTMLInputElement;
+        const color = targetElement.value;
+        document.documentElement.style.setProperty('--plate-text-color', color);
+    }
+
+    document
+        .getElementById('color-bg')
+        ?.addEventListener('change', (e) => updateBackgroundColor(e));
+
+    function updateBackgroundColor(event: Event) {
+        const targetElement = event.target as HTMLInputElement;
+        const colors: string = targetElement.value;
+        const colorsArray: string[] = colors
+            .split(',')
+            .map((code) => code.trim());
+        const gradient: string = `linear-gradient(0deg, ${colorsArray.join(', ')})`;
+        document.documentElement.style.setProperty(
+            '--plate-background',
+            gradient
+        );
+    }
 
     document
         .getElementById('btn-preview')
@@ -30,27 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .getElementById('btn-download')
         ?.addEventListener('click', () => downloadAllZip());
 
-    document
-        .getElementById('current-text')
-        ?.addEventListener('input', (event) => {
-            const text = (event.target as HTMLInputElement).value;
-            if (text) {
-                const ui = document.getElementById('ui-current-page');
-                const index = ui?.textContent;
-
-                if (index) {
-                    const page = getPageByIndex(parseInt(index));
-                    const content = page.querySelector(
-                        '.plate .plate-block .content'
-                    ) as HTMLParagraphElement;
-                    content.textContent = text;
-                } else {
-                    console.error(
-                        'The element or its text content is not found.'
-                    );
-                }
-            }
-        });
 
     window.addEventListener(
         'keydown',
@@ -61,16 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             switch (event.key) {
                 case 'ArrowDown':
-                    nextPage();
+                    currentPage = selectPage(currentPage - 1);
                     break;
                 case 'PageDown':
-                    nextPage();
+                    currentPage = selectPage(currentPage - 1);
                     break;
                 case 'ArrowUp':
-                    prevPage();
+                    currentPage = selectPage(currentPage + 1);
                     break;
                 case 'PageUp':
-                    prevPage();
+                    currentPage = selectPage(currentPage + 1);
                     break;
                 case 'ArrowLeft':
                     // Do something for "left arrow" key press.
@@ -93,74 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         true
     );
-
-    function getBook(event: Event) {
-        const files = (event.target as HTMLInputElement)?.files;
-        if (files && files.length > 0) {
-            const file: File = files[0];
-            const reader = new FileReader();
-            reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
-
-            reader.onload = function (e) {
-                window.book = JSON.parse(e.target?.result as string);
-                validateData(window.book);
-                // rechunkSentences(window.book, MAX_LENGTH_CONTENT);
-                generatePlates(window.book);
-                setNumberOfPages();
-                getPageByIndex(0).id = 'active-page';
-            };
-        }
-    }
-
-    function nextPage() {
-        const i = currentPageIndex();
-        selectPage(i + 1);
-    }
-
-    function prevPage() {
-        const i = currentPageIndex();
-        selectPage(i - 1);
-    }
-
-    function currentPageIndex(): number {
-        const activePage = document.getElementById('active-page');
-        const pages = document.querySelectorAll('.page');
-
-        for (let i = 0; i < pages.length; i++) {
-            if (pages[i] == activePage) {
-                return i;
-            }
-        }
-        throw new Error('active page not found');
-    }
-
-    function selectPage(index: number) {
-        //remove previous
-        document.getElementById('active-page')?.removeAttribute('id');
-
-        //set next
-        const nextPage = getPageByIndex(index);
-        nextPage.id = 'active-page';
-
-        //update ui
-        const counter = document.getElementById('ui-current-page')!;
-        counter.textContent = index.toString();
-    }
-
-    function getPageByIndex(index: number) {
-        const pages = document.querySelectorAll('.page');
-        if (index === -1) index = pages.length - 1; // wrap around from -1
-        const page = pages[index % pages.length]; // wrap around from last page
-        return page;
-    }
-
-    function setNumberOfPages() {
-        const totalPagesElement = document.getElementById('ui-total-pages');
-        const pages = document.querySelectorAll('.page');
-        if (totalPagesElement) {
-            totalPagesElement.textContent = pages.length.toString();
-        }
-    }
 
     function generatePlates(book: Book) {
         const container = document.createElement('div');

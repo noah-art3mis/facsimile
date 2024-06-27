@@ -1,13 +1,13 @@
-import { Book } from './types.ts';
+// import { Book } from './types.ts';
 
-export default function rechunkSentences(book: Book, maxLength) {
-    book.pages.forEach((page) => {
-        const contentCopy: Array<string | null> = JSON.parse(
-            JSON.stringify(page.content)
-        ); // deep copy
-        page.content = reduceSentences(contentCopy, maxLength);
-    });
-}
+// export default function rechunkSentences(book: Book, maxLength) {
+//     book.pages.forEach((page) => {
+//         const contentCopy: Array<string | null> = JSON.parse(
+//             JSON.stringify(page.content)
+//         ); // deep copy
+//         page.content = reduceSentences(contentCopy, maxLength);
+//     });
+// }
 
 function reduceSentences(
     sentences: Array<string | null>,

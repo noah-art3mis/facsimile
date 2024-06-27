@@ -12,30 +12,81 @@
             href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap"
             rel="stylesheet"
         />
-        <title>Semblance - AUTOMATON</title>
+        <title>Facsimile - AUTOMATON</title>
     </head>
     <body>
         <div class="header">
-            <h1>Semblance</h1>
+            <h1>Facsimile</h1>
             <p class="subheading">an AUTOMATON tool</p>
+            <a
+                href="https://github.com/noah-art3mis/semblance"
+                target="_blank"
+                rel="noopener noreferrer"
+                >source & README</a
+            >
+            <br />
         </div>
-        <input type="file" id="fileInput" accept=".json" />
-        <input type="text" id="current-text" placeholder="Select book" />
-        <div class="buttons">
-            <!-- <button id="btn-expand">expand</button> -->
-            <button id="btn-preview">compile</button>
-            <button disabled autocomplete="off" id="btn-download">
-                download all
-            </button>
-        </div>
-        <div class="interface">
-            <div class="page-counter">
-                <p id="ui-current-page"></p>
-                <p>/</p>
-                <p id="ui-total-pages"></p>
+        <div class="dashboard">
+            <div class="dashboard-item">
+                <div class="inline-input">
+                    <label for="fileInput">Select File:</label>
+                    <input type="file" id="fileInput" accept=".json" required />
+                </div>
+                <!-- 
+            <div class="dashboard-item">
+                <label for="current-text">Select book?</label>
+                <input
+                    type="text"
+                    id="current-text"
+                    placeholder="Select book"
+                />
+            </div> -->
+
+                <div class="inline-input">
+                    <label for="color-text">Text Color</label>
+                    <input
+                        type="text"
+                        id="color-text"
+                        placeholder="#C4B9B3"
+                        pattern="#[0-9a-f]{6}"
+                        maxlength="7"
+                        minlength="7"
+                        required
+                        title="please input one hex color (e.g. #C4B9B3)"
+                        size="7"
+                    />
+                </div>
+
+                <div class="inline-input">
+                    <label for="color-bg">Background Colors</label>
+                    <input
+                        type="text"
+                        id="color-bg"
+                        placeholder="#434343,#657189,#C4B9B3"
+                        pattern="#[0-9a-f]{6}(,#[0-9a-f]{6})*"
+                        required
+                        title="invalid input"
+                    />
+                </div>
             </div>
-            <button class="btn-next">Next page</button>
+
+            <div class="dashboard-item container">
+                <button type="button" id="btn-preview">Compile</button>
+                <button type="button" id="btn-download" disabled>
+                    Download
+                </button>
+            </div>
+
+            <div class="dashboard-item">
+                <div class="page-counter">
+                    <p>
+                        <span id="pages-current">?</span> /
+                        <span id="pages-total">?</span>
+                    </p>
+                </div>
+            </div>
         </div>
+
         <div class="summary-pages"></div>
         <script type="module" src="/src/main.ts"></script>
     </body>
