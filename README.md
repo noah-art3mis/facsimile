@@ -14,6 +14,6 @@ Use at https://facsimile.vercel.app/
 
 ## TODO
 
--   add loading feedback for compilation stage
--   add scrolling when a page has more than 6 plates
--   fix indexing bug where you can't see the first plate after navigating away
+-   add: loading feedback for compilation stage
+-   add: scrolling when a page has more than 6 plates
+-   fix: lock page indicators after compilation
