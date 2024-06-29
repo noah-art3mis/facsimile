@@ -55,7 +55,7 @@ input {
 }
 
 /* plates */
-.small-page-container {
+.page-container {
     display: flex;
     flex-direction: column;
     align-items: center;

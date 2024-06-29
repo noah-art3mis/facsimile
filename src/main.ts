@@ -1,10 +1,11 @@
 import html2canvas from 'html2canvas';
 import { downloadZip } from 'client-zip';
 import FileSaver from 'file-saver';
-import { Book, Page } from './types.ts';
+import { Book } from './types.ts';
 import { PREVIEW_SIZE, IMAGE_TYPE } from './config.ts';
 import { validateData } from './validateData.ts';
 import { initializePageCounter, selectPage } from './navigation.ts';
+import { generatePages } from './plates.ts';
 
 declare global {
     interface Window {
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = -1;
 
     document.getElementById('fileInput')?.addEventListener('change', (e) => {
-        document.querySelector('.small-page-container')?.remove();
+        document.querySelector('.page-container')?.remove();
         getBook(e);
     });
 
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = function (e) {
                 window.book = JSON.parse(e.target?.result as string);
                 validateData(window.book);
-                generatePlates(window.book);
+                generatePages(window.book);
                 initializePageCounter();
                 currentPage = 1;
                 const firstPage = document.querySelectorAll('.page')[0];
@@ -94,18 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'PageUp':
                     currentPage = selectPage(currentPage + 1);
                     break;
-                case 'ArrowLeft':
-                    // Do something for "left arrow" key press.
-                    break;
-                case 'ArrowRight':
-                    // Do something for "right arrow" key press.
-                    break;
-                case 'Enter':
-                    // Do something for "enter" or "return" key press.
-                    break;
-                case ' ':
-                    // Do something for "space" key press.
-                    break;
                 default:
                     return; // Quit when this doesn't handle the key event.
             }
@@ -116,56 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
         true
     );
 
-    function generatePlates(book: Book) {
-        const container = document.createElement('div');
-        container.classList.add('small-page-container');
-        document.querySelector('body')?.appendChild(container);
-
-        for (let i = 0; i < book.pages.length; i++) {
-            const page = document.createElement('div');
-            page.classList.add('page');
-            document.querySelector('.small-page-container')?.appendChild(page);
-            page.id = book.id + '-' + book.pages[i].number;
-
-            for (let j = 0; j < book.pages[i].content.length; j++) {
-                const plate = createPlate(book, book.pages[i], j);
-                page.appendChild(plate);
-            }
-        }
-    }
-
-    function createPlate(book: Book, page: Page, index: number) {
-        const plate = document.createElement('div');
-        plate.classList.add('plate');
-        plate.id = book.id + '-' + page.number + '-' + index;
-
-        const plateBlock = document.createElement('div');
-        plateBlock.classList.add('plate-block');
-        plate.appendChild(plateBlock);
-
-        const content = document.createElement('p');
-        content.textContent = page.content[index];
-        content.classList.add('content');
-        plateBlock.appendChild(content);
-
-        const reference = document.createElement('div');
-        reference.classList.add('reference');
-        plateBlock.appendChild(reference);
-
-        const author = document.createElement('p');
-        author.textContent = book.author;
-        author.classList.add('author');
-        reference.appendChild(author);
-
-        const title = document.createElement('p');
-        title.textContent = book.title;
-        title.classList.add('title');
-        reference.appendChild(title);
-
-        return plate;
-    }
-
-    function expandPlates() {
+    function compilePlates() {
+        document.body.style.cursor = 'wait';
+        
         document.documentElement.style.setProperty('--scale', '5');
 
         // https://html2canvas.hertzen.com/faq
@@ -173,11 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(document.documentElement.scrollHeight + 'bigwindow');
             alert('Big window');
         }
-    }
-
-    function compilePlates() {
-        document.body.style.cursor = 'wait';
-        expandPlates();
 
         const container = document.querySelector('.summary-pages');
         const pages = document.querySelectorAll('.page');

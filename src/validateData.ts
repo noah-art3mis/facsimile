@@ -72,7 +72,7 @@ function endsWithPunctuation(data: Book) {
 function notTooLong(data: Book) {
     for (const page of data.pages) {
         if (page.content.length > 10) {
-            const message = `${page.number} should end with punctuation`;
+            const message = `${page.number} has more than 10 sentences`;
             alert(message);
             console.log(message);
         }
