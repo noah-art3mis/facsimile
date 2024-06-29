@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.currentPage = 1;
 
     document.getElementById('fileInput')?.addEventListener('change', (e) => {
+        resetState();
         readBookData(e);
         toggleCounterVisibility();
     });
@@ -29,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .getElementById('color-bg')
         ?.addEventListener('change', (e) => updateBackgroundColor(e));
 
-    document
-        .getElementById('btn-compile')
-        ?.addEventListener('click', compilePlates);
+    document.getElementById('btn-compile')?.addEventListener('click', () => {
+        compilePlates();
+    });
 
     document
         .getElementById('btn-download')
@@ -76,18 +77,10 @@ function readBookData(event: Event) {
         reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
 
         reader.onload = function (e) {
-            resetState();
             window.book = JSON.parse(e.target?.result as string);
             validateData(window.book); // moving this line breaks it for some reason
             generatePages(window.book);
-            initializePageCounter();
-            const firstPage = document.querySelectorAll('.page')[0];
-            firstPage.id = 'active-page';
-
-            const counter = document.getElementById(
-                'page-counter'
-            ) as HTMLElement;
-            counter.style.display = 'block';
+            initializePageCounter(); // moving this line breaks it for some reason
         };
     }
 }
@@ -123,5 +116,4 @@ function resetState() {
         'btn-download'
     ) as HTMLButtonElement;
     btnDownload.disabled = true;
-
 }

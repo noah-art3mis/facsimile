@@ -73,11 +73,10 @@ input {
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
+    flex-wrap: nowrap;
     gap: 2rem;
     display: none;
+    margin: 0 1rem;
 }
 
 #active-page {
