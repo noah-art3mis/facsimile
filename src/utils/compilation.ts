@@ -1,8 +1,19 @@
 import { PREVIEW_SIZE, IMAGE_TYPE } from './config.ts';
 import html2canvas from 'html2canvas';
+import { toggleCounterVisibility } from './navigation.ts';
 
 export function compilePlates() {
-    document.body.style.cursor = 'wait';
+    toggleCounterVisibility();
+
+    const btnCompile = document.getElementById(
+        'btn-compile'
+    ) as HTMLButtonElement;
+    btnCompile.disabled = true;
+
+    const btnDownload = document.getElementById(
+        'btn-download'
+    ) as HTMLButtonElement;
+    btnDownload.disabled = false;
 
     document.documentElement.style.setProperty('--scale', '5');
 
@@ -12,7 +23,10 @@ export function compilePlates() {
         alert('Big window');
     }
 
-    const container = document.querySelector('.summary-pages');
+    const container = document.createElement('div');
+    container.classList.add('compiled-pages');
+    document.querySelector('body')?.appendChild(container);
+
     const pages = document.querySelectorAll('.page');
 
     for (const page of pages) {
@@ -30,22 +44,11 @@ export function compilePlates() {
             );
         }
     }
-
-    // const btnPreview = document.getElementById(
-    //     'btn-compile'
-    // ) as HTMLButtonElement;
-    // btnPreview.disabled = true;
-    const btnDownload = document.getElementById(
-        'btn-download'
-    ) as HTMLButtonElement;
-    btnDownload.disabled = false;
-
-    document.body.style.cursor = 'default';
 }
 
 function createPreview(src: string, name: string) {
     const container = document.createElement('div');
-    container.classList.add('preview');
+    container.classList.add('compiled');
 
     const a = document.createElement('a');
     a.href = src;

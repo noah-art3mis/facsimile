@@ -41,3 +41,12 @@ function updatePageCounter(page: number) {
     const counter = document.getElementById('pages-current') as HTMLSpanElement;
     counter.textContent = page.toString();
 }
+
+export function toggleCounterVisibility() {
+    const counter = document.getElementById('page-counter') as HTMLElement;
+    if (counter.style.display === 'none') {
+        counter.style.display = 'block';
+    } else {
+        counter.style.display = 'none';
+    }
+}

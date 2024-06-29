@@ -4,6 +4,7 @@ import { initializePageCounter, selectPage } from './utils/navigation.ts';
 import { generatePages } from './utils/plates.ts';
 import { compilePlates } from './utils/compilation.ts';
 import { downloadAllZip } from './utils/download.ts';
+import { toggleCounterVisibility } from './utils/navigation.ts';
 
 declare global {
     interface Window {
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('fileInput')?.addEventListener('change', (e) => {
         readBookData(e);
+        toggleCounterVisibility();
     });
 
     document
@@ -74,14 +76,18 @@ function readBookData(event: Event) {
         reader.readAsText(file); // triggers 'onload' event and sets 'result' attribute
 
         reader.onload = function (e) {
-            document.querySelector('.page-container')?.remove(); // reset previous pages
+            resetState();
             window.book = JSON.parse(e.target?.result as string);
-            
-            validateData(window.book);
+            validateData(window.book); // moving this line breaks it for some reason
             generatePages(window.book);
             initializePageCounter();
             const firstPage = document.querySelectorAll('.page')[0];
             firstPage.id = 'active-page';
+
+            const counter = document.getElementById(
+                'page-counter'
+            ) as HTMLElement;
+            counter.style.display = 'block';
         };
     }
 }
@@ -98,4 +104,24 @@ function updateBackgroundColor(event: Event) {
     const colorsArray: string[] = colors.split(',').map((code) => code.trim());
     const gradient: string = `linear-gradient(0deg, ${colorsArray.join(', ')})`;
     document.documentElement.style.setProperty('--plate-background', gradient);
+}
+
+function resetState() {
+    document.querySelector('.page-container')?.remove();
+    document.querySelector('.compiled-pages')?.remove();
+    document.documentElement.style.setProperty('--scale', '1.5');
+
+    const counter = document.getElementById('page-counter') as HTMLElement;
+    counter.style.display = 'none';
+
+    const btnCompile = document.getElementById(
+        'btn-compile'
+    ) as HTMLButtonElement;
+    btnCompile.disabled = false;
+
+    const btnDownload = document.getElementById(
+        'btn-download'
+    ) as HTMLButtonElement;
+    btnDownload.disabled = true;
+
 }

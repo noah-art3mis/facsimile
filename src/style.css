@@ -54,6 +54,10 @@ input {
     margin: 0.4rem;
 }
 
+#page-counter {
+    display: none;
+}
+
 /* plates */
 .page-container {
     display: flex;
@@ -61,17 +65,18 @@ input {
     align-items: center;
     justify-content: flex-start;
     gap: 1rem;
+    margin:1rem;
 }
 
 .page {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: left;
+    justify-content: flex-start;
     max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    gap: 4rem;
+    gap: 2rem;
     display: none;
 }
 
@@ -79,16 +84,16 @@ input {
     display: flex;
 }
 
-.summary-pages {
+.compiled-pages {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 4rem;
+    gap: 3rem;
     margin: 1rem;
     align-items: center;
 }
 
-.summary-page {
+.compiled {
     display: flex;
     flex-direction: row;
     align-items: center;
