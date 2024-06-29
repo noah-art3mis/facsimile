@@ -2,7 +2,7 @@ import { downloadZip } from 'client-zip';
 import FileSaver from 'file-saver';
 
 export async function downloadAllZip() {
-    const links = document.querySelectorAll('.preview a');
+    const links = document.querySelectorAll('.compiled a');
     const files = await Promise.all(
         Array.from(links).map(async (link: Element) => {
             const name = link.getAttribute('download');
