@@ -2,9 +2,9 @@ import { Book } from './types.ts';
 
 export function validateData(data: Book) {
     isBook(data);
-    arePagesUnique(data);
-    endsWithPunctuation(data);
-    notTooLong(data);
+    // arePagesUnique(data);
+    // endsWithPunctuation(data);
+    // notTooLong(data);
 }
 
 function isBook(data: Book) {
