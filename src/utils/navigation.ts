@@ -1,6 +1,9 @@
 export function initializePageCounter() {
     window.currentPage = 1;
 
+    const counter = document.getElementById('page-counter') as HTMLElement;
+    counter.style.display = 'block';
+
     const targetTotal = document.getElementById(
         'pages-total'
     ) as HTMLSpanElement;
@@ -12,6 +15,8 @@ export function initializePageCounter() {
         'pages-current'
     ) as HTMLSpanElement;
     targetCurrent.textContent = window.currentPage.toString();
+
+    pages[0].id = 'active-page';
 }
 
 export function selectPage(index: number) {
