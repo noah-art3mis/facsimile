@@ -102,6 +102,7 @@ function updateBackgroundColor(event: Event) {
 function resetState() {
     document.querySelector('.page-container')?.remove();
     document.querySelector('.compiled-pages')?.remove();
+    
     document.documentElement.style.setProperty('--scale', '1.5');
 
     const counter = document.getElementById('page-counter') as HTMLElement;
